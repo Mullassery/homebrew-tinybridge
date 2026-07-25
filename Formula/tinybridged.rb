@@ -60,7 +60,11 @@ class Tinybridged < Formula
     puts ""
     puts "Checking daemon status..."
     sleep 1
-    system("launchctl list | grep com.tinybridge.daemon") || puts "Daemon will start shortly..."
+    if system("launchctl list | grep com.tinybridge.daemon")
+      puts "✅ Daemon is running!"
+    else
+      puts "ℹ️  Daemon will start shortly..."
+    end
     puts ""
     puts "Daemon is now running in the background!"
     puts ""
