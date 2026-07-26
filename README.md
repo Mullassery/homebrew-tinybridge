@@ -49,9 +49,10 @@ Linux myproject 6.12.4-generic #1 SMP ... x86_64 GNU/Linux
 
 ### `tinybridged` (Daemon)
 - Background service managing environments
-- Installed to: `/usr/local/bin/tinybridged`
+- Installed to: `/opt/homebrew/Cellar/tinybridged/*/bin/tinybridged`
 - Auto-starts at boot via LaunchAgent
-- Logs to: `/var/log/tinybridge.log`
+- Socket: `~/Library/Application Support/TinyBridge/tinybridge.sock`
+- Logs to: `~/Library/Logs/tinybridged.log`
 - Size: ~20MB
 
 ### `tinybridge-app` (Menu Bar)
@@ -105,31 +106,34 @@ tinybridge forward myproject 8000:8000
 ### Check Daemon Status
 
 ```bash
-launchctl list | grep tinybridge
+launchctl list | grep tinybridged
 ```
 
 ### View Daemon Logs
 
 ```bash
 # Real-time logs
-tail -f /var/log/tinybridge.log
+tail -f ~/Library/Logs/tinybridged.log
 
 # Last 50 lines
-tail -50 /var/log/tinybridge.log
+tail -50 ~/Library/Logs/tinybridged.log
+
+# Check for errors
+tail -f ~/Library/Logs/tinybridged-error.log
 ```
 
 ### Restart Daemon
 
 ```bash
-launchctl stop com.tinybridge.daemon
-launchctl start com.tinybridge.daemon
+launchctl stop com.mullassery.tinybridged
+launchctl start com.mullassery.tinybridged
 ```
 
 ### Uninstall Daemon (keeps CLI)
 
 ```bash
-launchctl unload ~/Library/LaunchDaemons/com.tinybridge.daemon.plist
-rm ~/Library/LaunchDaemons/com.tinybridge.daemon.plist
+launchctl unload ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
+rm ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
 ```
 
 ## Updating
@@ -166,10 +170,15 @@ brew uninstall tinybridge
 brew untap Mullassery/tinybridge
 
 # Remove LaunchAgent
-rm ~/Library/LaunchDaemons/com.tinybridge.daemon.plist
+launchctl unload ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
+rm ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
 
-# Clean up logs
-rm /var/log/tinybridge.log
+# Remove wrapper script
+rm ~/.local/bin/tinybridged-start
+
+# Clean up logs and sockets
+rm -rf ~/Library/Logs/tinybridged*.log
+rm -rf ~/Library/Application\ Support/TinyBridge
 ```
 
 ### Keep Daemon, Remove CLI
@@ -185,13 +194,17 @@ brew uninstall tinybridge
 
 ```bash
 # Check if already running
-launchctl list | grep tinybridge
+launchctl list | grep tinybridged
 
 # Manually load LaunchAgent
-launchctl load ~/Library/LaunchDaemons/com.tinybridge.daemon.plist
+launchctl load ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
 
 # Check logs
-tail -f /var/log/tinybridge.log
+tail -f ~/Library/Logs/tinybridged.log
+tail -f ~/Library/Logs/tinybridged-error.log
+
+# Manually start daemon for debugging
+~/.local/bin/tinybridged-start
 ```
 
 ### Permission Denied Installing
@@ -209,13 +222,17 @@ sudo chown -R $USER:$GROUP /usr/local/bin
 
 ```bash
 # Verify socket exists
-ls -la /tmp/tinybridge.sock
+ls -la ~/Library/Application\ Support/TinyBridge/tinybridge.sock
 
 # Check daemon is running
-ps aux | grep tinybridged
+launchctl list | grep tinybridged
+
+# Check daemon logs
+tail -f ~/Library/Logs/tinybridged.log
 
 # Restart daemon
-launchctl restart com.tinybridge.daemon
+launchctl stop com.mullassery.tinybridged
+launchctl start com.mullassery.tinybridged
 ```
 
 ### Menu Bar App Won't Launch
@@ -284,4 +301,4 @@ brew install local/tinybridge
 
 ## License
 
-Apache 2.0 - See LICENSE in main TinyBridge repository
+Proprietary - See LICENSE in main TinyBridge repository
