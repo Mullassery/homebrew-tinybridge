@@ -7,8 +7,6 @@ class Tinybridge < Formula
   sha256 "e58f2ed4c12aaeaa95d986d5f024a19264cc31e429a3983b77133c646ab653e2"
   license "Proprietary"
 
-  depends_on "tinybridged" => :run
-
   def install
     bin.install "tinybridge"
   end
@@ -17,9 +15,8 @@ class Tinybridge < Formula
     puts "✅ TinyBridge CLI installed successfully!"
     puts ""
     puts "Next steps:"
-    puts "  1. Install daemon: brew install tinybridged"
-    puts "  2. Start your first environment: tinybridge up myproject"
-    puts "  3. Enter the environment: tinybridge shell myproject"
+    puts "  1. Start your first environment: tinybridge up myproject"
+    puts "  2. Enter the environment: tinybridge shell myproject"
     puts ""
     puts "Learn more: tinybridge --help"
   end
