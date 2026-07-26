@@ -3,9 +3,9 @@
 class Tinybridge < Formula
   desc "Run Linux environments on macOS with zero configuration"
   homepage "https://github.com/Mullassery/tinybridge"
-  url "https://github.com/Mullassery/tinybridge/releases/download/v0.4.0/tinybridge-0.4.0-x86_64-apple-darwin.tar.gz"
+  url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/tinybridge-0.3.0-x86_64-apple-darwin.tar.gz"
   sha256 "TODO_REPLACE_WITH_ACTUAL_SHA256"
-  license "Apache-2.0"
+  license "Proprietary"
 
   depends_on "tinybridged" => :run
 

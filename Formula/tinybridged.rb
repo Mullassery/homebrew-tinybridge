@@ -3,9 +3,9 @@
 class Tinybridged < Formula
   desc "TinyBridge daemon - Linux environment manager backend"
   homepage "https://github.com/Mullassery/tinybridge"
-  url "https://github.com/Mullassery/tinybridge/releases/download/v0.4.0/tinybridged-0.4.0-x86_64-apple-darwin.tar.gz"
+  url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/tinybridged-0.3.0-x86_64-apple-darwin.tar.gz"
   sha256 "TODO_REPLACE_WITH_ACTUAL_SHA256"
-  license "Apache-2.0"
+  license "Proprietary"
 
   def install
     bin.install "tinybridged"
