@@ -5,7 +5,7 @@ class TinybridgeApp < Formula
   homepage "https://github.com/Mullassery/tinybridge"
   url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/TinyBridge-0.3.0.dmg"
   sha256 "TODO_REPLACE_WITH_ACTUAL_SHA256"
-  license "Apache-2.0"
+  license "Proprietary"
 
   app "TinyBridge.app"
 
