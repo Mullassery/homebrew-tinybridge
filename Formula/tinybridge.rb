@@ -15,7 +15,7 @@ class Tinybridge < Formula
     end
   end
 
-  license "Proprietary"
+  license "Apache-2.0"
 
   def install
     bin.install "tinybridge"

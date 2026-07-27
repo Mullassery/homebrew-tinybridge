@@ -15,7 +15,7 @@ class Tinybridged < Formula
     end
   end
 
-  license "Proprietary"
+  license "Apache-2.0"
   depends_on "tinybridge"
 
   def install
