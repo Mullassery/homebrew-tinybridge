@@ -3,8 +3,18 @@
 class Tinybridge < Formula
   desc "Run Linux environments on macOS with zero configuration"
   homepage "https://github.com/Mullassery/tinybridge"
-  url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/tinybridge-0.3.0-x86_64-apple-darwin.tar.gz"
-  sha256 "e58f2ed4c12aaeaa95d986d5f024a19264cc31e429a3983b77133c646ab653e2"
+
+  on_macos do
+    on_arm do
+      url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/tinybridge-0.3.0-aarch64-apple-darwin.tar.gz"
+      sha256 "c0efc69070a12bba9fa972abf833dc5be09b765848ac62b6cbaad8d3f73f3f74"
+    end
+    on_intel do
+      url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/tinybridge-0.3.0-x86_64-apple-darwin.tar.gz"
+      sha256 "c0efc69070a12bba9fa972abf833dc5be09b765848ac62b6cbaad8d3f73f3f74"
+    end
+  end
+
   license "Proprietary"
 
   def install
@@ -15,8 +25,9 @@ class Tinybridge < Formula
     puts "✅ TinyBridge CLI installed successfully!"
     puts ""
     puts "Next steps:"
-    puts "  1. Start your first environment: tinybridge up myproject"
-    puts "  2. Enter the environment: tinybridge shell myproject"
+    puts "  1. Install daemon: brew install tinybridged"
+    puts "  2. Start your first environment: tinybridge up myproject"
+    puts "  3. Enter the environment: tinybridge shell myproject"
     puts ""
     puts "Learn more: tinybridge --help"
   end
