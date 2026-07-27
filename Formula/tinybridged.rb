@@ -6,12 +6,12 @@ class Tinybridged < Formula
 
   on_macos do
     on_arm do
-      url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/tinybridged-0.3.0-aarch64-apple-darwin.tar.gz"
-      sha256 "6908da9b2947ff46fa2591a4eff33cd78f7273611edf78ca374794dc9afed9ed"
+      url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.1/tinybridged-0.3.1-aarch64-apple-darwin.tar.gz"
+      sha256 "12606bc2561ad36a9a5c7f73abda2863ac2e0f81656c35ac746bcedaabcd5054"
     end
     on_intel do
-      url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.0/tinybridged-0.3.0-x86_64-apple-darwin.tar.gz"
-      sha256 "6908da9b2947ff46fa2591a4eff33cd78f7273611edf78ca374794dc9afed9ed"
+      url "https://github.com/Mullassery/tinybridge/releases/download/v0.3.1/tinybridged-0.3.1-x86_64-apple-darwin.tar.gz"
+      sha256 "12606bc2561ad36a9a5c7f73abda2863ac2e0f81656c35ac746bcedaabcd5054"
     end
   end
 
