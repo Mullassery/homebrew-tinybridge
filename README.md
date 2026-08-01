@@ -6,6 +6,13 @@ Custom Homebrew tap to install TinyBridge - run Linux environments on macOS with
 
 ✅ **Ready to use** - All formulas tested and working!
 
+### Supported Architectures
+
+- **Apple Silicon** (M1, M2, M3, M4) - `aarch64-apple-darwin`
+- **Intel Mac** - `x86_64-apple-darwin`
+
+Homebrew automatically downloads the correct binary for your architecture.
+
 ## Quick Start
 
 ### 1. Add the Tap
@@ -16,15 +23,23 @@ brew tap Mullassery/tinybridge https://github.com/Mullassery/homebrew-tinybridge
 
 ### 2. Install TinyBridge
 
+**Recommended - Full Installation (CLI + Daemon):**
 ```bash
-# Install CLI and daemon (recommended)
-brew install tinybridge
-
-# Or install components separately
-brew install tinybridge      # CLI tool
-brew install tinybridged     # Daemon (auto-starts at boot)
-brew install tinybridge-app  # Menu bar app (optional)
+brew install tinybridged
 ```
+This installs both `tinybridge` (CLI) and `tinybridged` (daemon with auto-start).
+
+**Alternative - CLI Only:**
+```bash
+brew install tinybridge
+```
+Installs just the command-line tool (no background daemon).
+
+**Optional - Menu Bar App:**
+```bash
+brew install tinybridge-app
+```
+Native macOS menu bar application for visual environment management.
 
 ### 3. Create Your First Environment
 
