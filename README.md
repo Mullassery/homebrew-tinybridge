@@ -4,7 +4,8 @@ Custom Homebrew tap to install TinyBridge - run Linux environments on macOS with
 
 ## Status
 
-✅ **Ready to use** - All formulas tested and working!
+Formulas `tinybridge` and `tinybridged` reference release artifacts with valid checksums.
+`tinybridge-app` currently has a placeholder checksum — see Known Issues below.
 
 ### Supported Architectures
 
@@ -308,6 +309,15 @@ brew tap-new local /path/to/homebrew-tinybridge
 brew install local/tinybridge
 ```
 
+## Known Issues
+
+- `Formula/tinybridge-app.rb` has a placeholder `sha256`
+  (`TODO_REPLACE_WITH_ACTUAL_SHA256`) instead of a real checksum. `brew install tinybridge-app`
+  will fail until this is replaced with the actual checksum of the published `.dmg`.
+- The `tinybridge` and `tinybridged` formulas reference checksums that are correctly formatted
+  64-character SHA-256 values; they were not independently re-verified against the release
+  assets as part of this audit.
+
 ## Support & Issues
 
 - **Report bugs**: https://github.com/Mullassery/tinybridge/issues
@@ -316,4 +326,6 @@ brew install local/tinybridge
 
 ## License
 
-Proprietary - See LICENSE in main TinyBridge repository
+This tap is released under a proprietary, attribution-required license — see
+[LICENSE](LICENSE) in this repository for the full terms. TinyBridge itself is proprietary
+software licensed separately by the main TinyBridge repository.
