@@ -4,22 +4,26 @@ Custom Homebrew tap to install TinyBridge - run Linux environments on macOS with
 
 ## Status
 
-Formulas `tinybridge` and `tinybridged` reference release artifacts with valid checksums.
-`tinybridge-app` currently has a placeholder checksum — see Known Issues below.
+Both formulas (`tinybridge`, `tinybridged`) point at the real v0.5.0 release
+asset with a verified checksum, and have been installed and run end-to-end
+as part of this pass (daemon started via `brew services`, CLI `--version`
+and `--help` both work, the VM host process resolves its bundled library
+correctly). See Known Issues below for what's still unverified upstream.
 
 ### Supported Architectures
 
-- **Apple Silicon** (M1, M2, M3, M4) - `aarch64-apple-darwin`
-- **Intel Mac** - `x86_64-apple-darwin`
+- **Apple Silicon** (M1 and later) - `aarch64-apple-darwin`
 
-Homebrew automatically downloads the correct binary for your architecture.
+Only an Apple Silicon build is currently published. There is no Intel
+(`x86_64`) release artifact as of v0.5.0 — the formulas will refuse to
+install on Intel Macs rather than fail with a confusing download error.
 
 ## Quick Start
 
 ### 1. Add the Tap
 
 ```bash
-brew tap Mullassery/tinybridge https://github.com/Mullassery/homebrew-tinybridge.git
+brew tap mullassery/tinybridge https://github.com/Mullassery/homebrew-tinybridge.git
 ```
 
 ### 2. Install TinyBridge
@@ -28,7 +32,8 @@ brew tap Mullassery/tinybridge https://github.com/Mullassery/homebrew-tinybridge
 ```bash
 brew install tinybridged
 ```
-This installs both `tinybridge` (CLI) and `tinybridged` (daemon with auto-start).
+This installs both `tinybridge` (CLI) and `tinybridged` (daemon), since
+`tinybridged` depends on `tinybridge`.
 
 **Alternative - CLI Only:**
 ```bash
@@ -36,287 +41,141 @@ brew install tinybridge
 ```
 Installs just the command-line tool (no background daemon).
 
-**Optional - Menu Bar App:**
+### 3. Start the Daemon
+
 ```bash
-brew install tinybridge-app
+brew services start tinybridged
 ```
-Native macOS menu bar application for visual environment management.
 
-### 3. Create Your First Environment
+### 4. Create Your First Environment
 
 ```bash
-# Create environment
-tinybridge up myproject
-
-# Enter the Linux shell
+tinybridge launch myproject
 tinybridge shell myproject
-
-# You're now in Ubuntu!
-ubuntu@myproject:~$ uname -a
-Linux myproject 6.12.4-generic #1 SMP ... x86_64 GNU/Linux
 ```
+
+A full guest OS boot to a login prompt is not yet verified upstream — see
+Known Issues.
 
 ## What Gets Installed
 
 ### `tinybridge` (CLI)
 - Command-line interface
-- Installed to: `/usr/local/bin/tinybridge`
-- Size: ~15MB
+- Symlinked to `$(brew --prefix)/bin/tinybridge`
 
-### `tinybridged` (Daemon)
-- Background service managing environments
-- Installed to: `/opt/homebrew/Cellar/tinybridged/*/bin/tinybridged`
-- Auto-starts at boot via LaunchAgent
+### `tinybridged` (Daemon + VM host)
+- `tinybridged`: background service managing environments
+- `tinybridge-vmhost`: per-VM host process that drives Apple's
+  Virtualization.framework (ad-hoc codesigned with the
+  `com.apple.security.virtualization` entitlement at install time)
+- Managed via `brew services` (`start`/`stop`/`restart`), not a manually
+  written LaunchAgent
 - Socket: `~/Library/Application Support/TinyBridge/tinybridge.sock`
-- Logs to: `~/Library/Logs/tinybridged.log`
-- Size: ~20MB
-
-### `tinybridge-app` (Menu Bar)
-- Native macOS menu bar application
-- Installed to: `/Applications/TinyBridge.app`
-- Optional - for visual environment management
-- Size: ~50MB
+- Logs: `$(brew --prefix)/var/log/tinybridge.log`
 
 ## Commands Reference
 
-### Basic Commands
+Real command list, from `tinybridge --help` (v0.5.0):
 
-```bash
-# Create environment
-tinybridge up myproject
-
-# Enter environment
-tinybridge shell myproject
-
-# Stop environment
-tinybridge down myproject
-
-# Check status
-tinybridge status myproject
-
-# List all environments
-tinybridge list
+```
+launch     Launch a new environment (primary command as of v0.5.0)
+up         Start an environment (legacy alias for launch)
+gui        Attach display window to environment
+headless   Detach display window from environment
+down       Stop an environment
+suspend    Suspend an environment (pause VM, preserves state)
+resume     Resume a suspended environment
+shutdown   Gracefully shutdown an environment
+restart    Restart an environment
+repair     Repair an environment
+destroy    Destroy an environment
+status     Show environment status
+list       List all environments
+shell      Open shell in environment
+ssh        SSH into environment
+logs       Show logs
+update     Manage environment resources
+snapshot   Manage environment snapshots
+doctor     Run system diagnostics
+templates  List available templates
+images     List available images
+dds        Manage DDS networking
 ```
 
-### Advanced Commands
-
-```bash
-# View logs
-tinybridge logs myproject
-
-# Checkpoint progress
-tinybridge checkpoint myproject --name "after-deploy"
-
-# Restore from checkpoint
-tinybridge restore myproject --from "after-deploy"
-
-# Adjust resources
-tinybridge update myproject --cpu 8 --memory 16GB
-
-# Forward ports
-tinybridge forward myproject 8000:8000
-```
+Run `tinybridge <command> --help` for each command's actual flags — this
+tap doesn't duplicate that reference here to avoid it going stale again.
 
 ## Managing the Daemon
 
-### Check Daemon Status
-
 ```bash
-launchctl list | grep tinybridged
-```
+# Status
+brew services list | grep tinybridge
 
-### View Daemon Logs
+# Start / stop / restart
+brew services start tinybridged
+brew services stop tinybridged
+brew services restart tinybridged
 
-```bash
-# Real-time logs
-tail -f ~/Library/Logs/tinybridged.log
-
-# Last 50 lines
-tail -50 ~/Library/Logs/tinybridged.log
-
-# Check for errors
-tail -f ~/Library/Logs/tinybridged-error.log
-```
-
-### Restart Daemon
-
-```bash
-launchctl stop com.mullassery.tinybridged
-launchctl start com.mullassery.tinybridged
-```
-
-### Uninstall Daemon (keeps CLI)
-
-```bash
-launchctl unload ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
-rm ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
+# Logs
+tail -f "$(brew --prefix)/var/log/tinybridge.log"
 ```
 
 ## Updating
 
-### Update TinyBridge
-
 ```bash
-brew upgrade tinybridge
-```
-
-### Update Daemon
-
-```bash
-brew upgrade tinybridged
-```
-
-### Update Menu Bar App
-
-```bash
-brew upgrade tinybridge-app
+brew upgrade tinybridge tinybridged
 ```
 
 ## Uninstalling
 
-### Remove Everything
-
 ```bash
-# Uninstall formulas
-brew uninstall tinybridge-app
-brew uninstall tinybridged
-brew uninstall tinybridge
+brew services stop tinybridged
+brew uninstall tinybridged tinybridge
+brew untap mullassery/tinybridge
 
-# Remove tap
-brew untap Mullassery/tinybridge
-
-# Remove LaunchAgent
-launchctl unload ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
-rm ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
-
-# Remove wrapper script
-rm ~/.local/bin/tinybridged-start
-
-# Clean up logs and sockets
-rm -rf ~/Library/Logs/tinybridged*.log
+# Optional: remove runtime state
 rm -rf ~/Library/Application\ Support/TinyBridge
-```
-
-### Keep Daemon, Remove CLI
-
-```bash
-brew uninstall tinybridge
-# Daemon continues running in background
 ```
 
 ## Troubleshooting
 
-### Daemon Won't Start
+### Daemon won't start
 
 ```bash
-# Check if already running
-launchctl list | grep tinybridged
-
-# Manually load LaunchAgent
-launchctl load ~/Library/LaunchAgents/com.mullassery.tinybridged.plist
-
-# Check logs
-tail -f ~/Library/Logs/tinybridged.log
-tail -f ~/Library/Logs/tinybridged-error.log
-
-# Manually start daemon for debugging
-~/.local/bin/tinybridged-start
+brew services list | grep tinybridge
+tail -f "$(brew --prefix)/var/log/tinybridge.log"
 ```
 
-### Permission Denied Installing
+### CLI can't connect to daemon
 
 ```bash
-# If getting permission errors:
-# Make sure /usr/local/bin is writable
-ls -la /usr/local/bin
-
-# If not owned by you:
-sudo chown -R $USER:$GROUP /usr/local/bin
-```
-
-### CLI Can't Connect to Daemon
-
-```bash
-# Verify socket exists
 ls -la ~/Library/Application\ Support/TinyBridge/tinybridge.sock
-
-# Check daemon is running
-launchctl list | grep tinybridged
-
-# Check daemon logs
-tail -f ~/Library/Logs/tinybridged.log
-
-# Restart daemon
-launchctl stop com.mullassery.tinybridged
-launchctl start com.mullassery.tinybridged
-```
-
-### Menu Bar App Won't Launch
-
-```bash
-# Launch from Terminal for debugging
-/Applications/TinyBridge.app/Contents/MacOS/TinyBridgeApp
-
-# Check permissions
-ls -la /Applications/TinyBridge.app
-
-# Try reinstalling
-brew reinstall tinybridge-app
-```
-
-### Out of Disk Space
-
-```bash
-# Check disk usage
-df -h
-
-# Clean up old environments
-tinybridge list
-tinybridge delete old-project --force
-
-# Clear TinyBridge cache
-rm -rf ~/.cache/tinybridge
+brew services restart tinybridged
 ```
 
 ## Development
 
-### Local Testing
-
 ```bash
-# Tap locally for testing
-brew tap-new test/local ~/test-tap
-cp Formula/* ~/test-tap/Formula/
-
-# Test install
-brew install test/local/tinybridge
-
-# Test uninstall
-brew uninstall test/local/tinybridge
-```
-
-### Modify Formulas
-
-```bash
-# Clone this repo
 git clone https://github.com/Mullassery/homebrew-tinybridge.git
 cd homebrew-tinybridge
 
-# Edit Formula files
-vi Formula/tinybridge.rb
-
-# Test locally
-brew tap-new local /path/to/homebrew-tinybridge
-brew install local/tinybridge
+# Edit a formula, then test locally:
+brew install --formula Formula/tinybridge.rb
 ```
 
 ## Known Issues
 
-- `Formula/tinybridge-app.rb` has a placeholder `sha256`
-  (`TODO_REPLACE_WITH_ACTUAL_SHA256`) instead of a real checksum. `brew install tinybridge-app`
-  will fail until this is replaced with the actual checksum of the published `.dmg`.
-- The `tinybridge` and `tinybridged` formulas reference checksums that are correctly formatted
-  64-character SHA-256 values; they were not independently re-verified against the release
-  assets as part of this audit.
+- Only Apple Silicon is supported; there is no Intel build published upstream.
+- `tinybridge-vmhost` was built without headerpad room for `install_name_tool
+  -add_rpath`, so it can't have an rpath patched in post-download. The
+  `tinybridged` formula works around this with a `DYLD_LIBRARY_PATH` wrapper
+  script instead of patching the binary — verified working, but a proper fix
+  is for the upstream build to link with `-headerpad_max_install_names` (or
+  embed the rpath at link time) so this workaround isn't needed.
+- Per the v0.5.0 release notes' own "Honest status" section: a full guest OS
+  boot to a login prompt is not yet verified end-to-end (no bundled/
+  auto-downloaded root filesystem image exists yet). Don't rely on this tap
+  for anything beyond local testing of the CLI/daemon/VM-host plumbing itself.
 
 ## Support & Issues
 
