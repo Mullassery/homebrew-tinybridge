@@ -3,8 +3,8 @@
 class Tinybridged < Formula
   desc "TinyBridge daemon and VM host - Linux environment manager backend"
   homepage "https://github.com/Mullassery/tinybridge"
-  url "https://github.com/Mullassery/tinybridge/releases/download/v0.5.1/tinybridge-0.5.1-aarch64-apple-darwin.tar.gz"
-  sha256 "1b6e12664ca774e77becee9ee7152464ac660e0961ded70e7a25ae50f91e979c"
+  url "https://github.com/Mullassery/tinybridge/releases/download/v0.6.0/tinybridge-0.6.0-aarch64-apple-darwin.tar.gz"
+  sha256 "fdf796c5cf81a29d19db0e1ddbe04f7a1594e2cfdadc601309357789af4fc40c"
   license "Proprietary"
 
   depends_on macos: :ventura
@@ -16,13 +16,12 @@ class Tinybridged < Formula
     # tinybridged itself has no dylib dependency and installs normally.
     bin.install "tinybridged"
 
-    # tinybridge-vmhost loads libTinyBridgeVZBridge.dylib via @rpath, but the
-    # binary has no embedded rpath and wasn't built with headerpad room to
-    # add one via install_name_tool (fails: "load commands do not fit").
-    # Wrap it with a DYLD_LIBRARY_PATH env script instead of patching it.
+    # As of v0.6.0, tinybridge-vmhost is built with an @executable_path
+    # rpath (crates/tinybridge-vmhost/build.rs upstream), so it finds
+    # libTinyBridgeVZBridge.dylib next to itself with no DYLD_LIBRARY_PATH
+    # wrapper or install_name_tool patch needed — just keep them together.
     libexec.install "tinybridge-vmhost", "libTinyBridgeVZBridge.dylib"
-    (bin/"tinybridge-vmhost").write_env_script libexec/"tinybridge-vmhost",
-                                                DYLD_LIBRARY_PATH: libexec.to_s
+    bin.install_symlink libexec/"tinybridge-vmhost"
 
     # tinybridge-vmhost requires the com.apple.security.virtualization
     # entitlement to call into Virtualization.framework. Ad-hoc signing
@@ -48,9 +47,12 @@ class Tinybridged < Formula
 
       Logs: #{var}/log/tinybridge.log
 
-      A full guest OS boot to a login prompt is not yet verified upstream —
-      see the release notes for v0.5.1 ("Honest status" section) before
-      relying on this for anything beyond local testing.
+      Guest boot to a real login prompt is verified working upstream as of
+      v0.6.0, but this install path doesn't bundle or auto-download a root
+      filesystem image yet, so you'll need to supply your own kernel/disk/
+      seed image. See the main repo's README "Honest status" section for
+      the current, accurate picture before relying on this for anything
+      beyond local testing of the CLI/daemon/VM-host plumbing itself.
     EOS
   end
 
