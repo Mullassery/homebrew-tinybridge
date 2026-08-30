@@ -4,18 +4,20 @@ Custom Homebrew tap to install TinyBridge - run Linux environments on macOS with
 
 ## Status
 
-Both formulas (`tinybridge`, `tinybridged`) point at the real v0.5.0 release
+Both formulas (`tinybridge`, `tinybridged`) point at the real v0.6.0 release
 asset with a verified checksum, and have been installed and run end-to-end
 as part of this pass (daemon started via `brew services`, CLI `--version`
-and `--help` both work, the VM host process resolves its bundled library
-correctly). See Known Issues below for what's still unverified upstream.
+and `--help` both work, `tinybridge-vmhost` resolves its bundled library via
+its own embedded `@executable_path` rpath — no `DYLD_LIBRARY_PATH` wrapper
+needed anymore as of v0.6.0). See Known Issues below for what's still
+unverified upstream.
 
 ### Supported Architectures
 
 - **Apple Silicon** (M1 and later) - `aarch64-apple-darwin`
 
 Only an Apple Silicon build is currently published. There is no Intel
-(`x86_64`) release artifact as of v0.5.0 — the formulas will refuse to
+(`x86_64`) release artifact as of v0.6.0 — the formulas will refuse to
 install on Intel Macs rather than fail with a confusing download error.
 
 ## Quick Start
@@ -54,8 +56,9 @@ tinybridge launch myproject
 tinybridge shell myproject
 ```
 
-A full guest OS boot to a login prompt is not yet verified upstream — see
-Known Issues.
+Guest boot to a real login prompt is verified working upstream as of
+v0.6.0 — see Known Issues for what this install path still doesn't
+automate (kernel/disk/seed image aren't bundled or auto-downloaded yet).
 
 ## What Gets Installed
 
@@ -75,10 +78,10 @@ Known Issues.
 
 ## Commands Reference
 
-Real command list, from `tinybridge --help` (v0.5.0):
+Real command list, from `tinybridge --help` (v0.6.0):
 
 ```
-launch     Launch a new environment (primary command as of v0.5.0)
+launch     Launch a new environment (primary command as of v0.5.0+)
 up         Start an environment (legacy alias for launch)
 gui        Attach display window to environment
 headless   Detach display window from environment
@@ -159,23 +162,29 @@ brew services restart tinybridged
 git clone https://github.com/Mullassery/homebrew-tinybridge.git
 cd homebrew-tinybridge
 
-# Edit a formula, then test locally:
-brew install --formula Formula/tinybridge.rb
+# Edit a formula, commit the change (brew tap clones from git, so it only
+# sees committed state, not your working tree), then test locally:
+brew tap mullassery/tinybridge-local "$(pwd)"
+brew trust mullassery/tinybridge-local
+brew install mullassery/tinybridge-local/tinybridge
 ```
 
 ## Known Issues
 
 - Only Apple Silicon is supported; there is no Intel build published upstream.
-- `tinybridge-vmhost` was built without headerpad room for `install_name_tool
-  -add_rpath`, so it can't have an rpath patched in post-download. The
-  `tinybridged` formula works around this with a `DYLD_LIBRARY_PATH` wrapper
-  script instead of patching the binary — verified working, but a proper fix
-  is for the upstream build to link with `-headerpad_max_install_names` (or
-  embed the rpath at link time) so this workaround isn't needed.
-- Per the v0.5.0 release notes' own "Honest status" section: a full guest OS
-  boot to a login prompt is not yet verified end-to-end (no bundled/
-  auto-downloaded root filesystem image exists yet). Don't rely on this tap
-  for anything beyond local testing of the CLI/daemon/VM-host plumbing itself.
+- ~~`tinybridge-vmhost` had no rpath and needed a `DYLD_LIBRARY_PATH`
+  wrapper workaround~~ — fixed upstream in v0.6.0: the binary now embeds
+  `@executable_path`/`@loader_path` rpaths at link time
+  (`crates/tinybridge-vmhost/build.rs`), so `tinybridged` installs it
+  straight into `libexec` with a plain symlink from `bin`, no wrapper
+  script needed. Verified end-to-end through the real installed symlink
+  chain with an empty environment.
+- Guest boot to a real login prompt is verified working upstream as of
+  v0.6.0 (main repo's README "Honest status" section has the full story),
+  but this install path still doesn't bundle or auto-download a kernel,
+  disk image, or cloud-init seed — you'd need to supply those yourself.
+  Don't rely on this tap for anything beyond local testing of the
+  CLI/daemon/VM-host plumbing itself.
 
 ## Support & Issues
 
