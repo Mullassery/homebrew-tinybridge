@@ -194,6 +194,4 @@ brew install mullassery/tinybridge-local/tinybridge
 
 ## License
 
-This tap is released under a proprietary, attribution-required license — see
-[LICENSE](LICENSE) in this repository for the full terms. TinyBridge itself is proprietary
-software licensed separately by the main TinyBridge repository.
+This tap and TinyBridge are licensed under the [Apache License 2.0](LICENSE).
