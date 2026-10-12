@@ -1,6 +1,6 @@
 # Homebrew Tap for TinyBridge
 
-[![Grapify](https://img.shields.io/badge/Grapify-Code%20Scan-purple)](https://grapify.ai)
+[![Graphify](https://img.shields.io/badge/Graphify-knowledge%20graph-blue)](https://github.com/Graphify-Labs/graphify)
 
 Custom Homebrew tap to install TinyBridge - run Linux environments on macOS with zero configuration.
 
