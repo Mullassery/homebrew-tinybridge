@@ -194,6 +194,16 @@ brew install mullassery/tinybridge-local/tinybridge
 - **Tap issues**: https://github.com/Mullassery/homebrew-tinybridge/issues
 - **Documentation**: https://github.com/Mullassery/tinybridge
 
+## Related projects
+
+Part of the Mullassery open-source family:
+
+- [TinyBridge](https://github.com/Mullassery/tinybridge) — the macOS-native Linux VM runtime this tap installs
+- [PrismNote](https://github.com/Mullassery/prismnote) — local-first SQL/notebook environment with AI assistance
+- [homebrew-prismnote](https://github.com/Mullassery/homebrew-prismnote) — Homebrew tap for PrismNote
+- [SyncFleet](https://github.com/Mullassery/SyncFleet) — peer-to-peer state synchronization for robotics fleets
+- [Browse all projects →](https://github.com/Mullassery?tab=repositories)
+
 ## License
 
 This tap and TinyBridge are licensed under the [Apache License 2.0](LICENSE).
