@@ -11,7 +11,7 @@ class Tinybridge < Formula
 
   # Only an Apple Silicon (arm64) build is published as of v0.6.1 — no
   # Intel (x86_64) release artifact currently exists.
-  disable! date: nil, because: :unsupported unless Hardware::CPU.arm?
+  disable! date: "2026-10-14", because: :unsupported unless Hardware::CPU.arm?
 
   def install
     bin.install "tinybridge"

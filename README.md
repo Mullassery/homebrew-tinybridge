@@ -6,7 +6,7 @@ Custom Homebrew tap to install TinyBridge - run Linux environments on macOS with
 
 ## Status
 
-Both formulas (`tinybridge`, `tinybridged`) point at the real v0.6.0 release
+Both formulas (`tinybridge`, `tinybridged`) point at the real v0.6.1 release
 asset with a verified checksum, and have been installed and run end-to-end
 as part of this pass (daemon started via `brew services`, CLI `--version`
 and `--help` both work, `tinybridge-vmhost` resolves its bundled library via

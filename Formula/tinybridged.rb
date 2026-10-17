@@ -10,7 +10,7 @@ class Tinybridged < Formula
   depends_on macos: :ventura
   depends_on "tinybridge"
 
-  disable! date: nil, because: :unsupported unless Hardware::CPU.arm?
+  disable! date: "2026-10-14", because: :unsupported unless Hardware::CPU.arm?
 
   def install
     # tinybridged itself has no dylib dependency and installs normally.
