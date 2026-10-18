@@ -3,8 +3,8 @@
 class Tinybridge < Formula
   desc "Run Linux environments on macOS with zero configuration"
   homepage "https://github.com/Mullassery/tinybridge"
-  url "https://github.com/Mullassery/tinybridge/releases/download/v0.6.1/tinybridge-0.6.1-aarch64-apple-darwin.tar.gz"
-  sha256 "ae8a95e8003a67c761ef68833864bf915becc71814311bbbb17942a6c6fd083b"
+  url "https://github.com/Mullassery/tinybridge/releases/download/v0.6.2/tinybridge-0.6.2-aarch64-apple-darwin.tar.gz"
+  sha256 "f565717a2bfe1952e31c3f00fd833797bd3d4bd31df30855ee314a92c4840235"
   license "Apache-2.0"
 
   depends_on macos: :ventura
