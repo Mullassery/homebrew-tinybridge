@@ -1,0 +1,57 @@
+name: Bump formula
+
+# Driven either by a `tinybridge-release` repository_dispatch from the
+# tinybridge repo (see tinybridge/.github/workflows/homebrew-bump.yml) or
+# manually via the Actions UI / `gh workflow run`.
+on:
+  repository_dispatch:
+    types: [tinybridge-release]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "tinybridge version to bump to (e.g. 0.6.3 or v0.6.3)"
+        required: true
+      sha256:
+        description: "sha256 of the release tarball"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version and sha256
+        id: inputs
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            VERSION="${{ github.event.client_payload.version }}"
+            SHA="${{ github.event.client_payload.sha256 }}"
+          else
+            VERSION="${{ inputs.version }}"
+            SHA="${{ inputs.sha256 }}"
+          fi
+          if [ -z "$VERSION" ] || [ -z "$SHA" ]; then
+            echo "::error::version and sha256 are both required"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "sha256=$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Bump formula
+        run: tools/bump_formula.sh "${{ steps.inputs.outputs.version }}" "${{ steps.inputs.outputs.sha256 }}"
+
+      - name: Commit and push
+        run: |
+          if git diff --quiet; then
+            echo "Formula already up to date — nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Formula/tinybridge.rb
+          git commit -m "tinybridge ${{ steps.inputs.outputs.version }}"
+          git push
