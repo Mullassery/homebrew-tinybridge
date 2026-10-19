@@ -204,6 +204,17 @@ Part of the Mullassery open-source family:
 - [SyncFleet](https://github.com/Mullassery/SyncFleet) — peer-to-peer state synchronization for robotics fleets
 - [Browse all projects →](https://github.com/Mullassery?tab=repositories)
 
+## Known issues and deferred work
+
+**Blocked / failed:**
+- `tinybridged` formula lags the CLI (0.6.1 vs 0.7.0); needs a lockstep bump after the next release.
+- No Intel formula because upstream has no x86_64 artifact.
+
+**Rejected / deferred:**
+- Intel formula until an x86_64 release exists.
+
+Full shipped/blocked/rejected detail: [`QUEUE_STATUS.md`](QUEUE_STATUS.md).
+
 ## Queue status
 
 Shipped, blocked/failed, and rejected work for this repository is documented in
