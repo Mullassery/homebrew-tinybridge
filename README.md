@@ -204,6 +204,11 @@ Part of the Mullassery open-source family:
 - [SyncFleet](https://github.com/Mullassery/SyncFleet) — peer-to-peer state synchronization for robotics fleets
 - [Browse all projects →](https://github.com/Mullassery?tab=repositories)
 
+## Queue status
+
+Shipped, blocked/failed, and rejected work for this repository is documented in
+[`QUEUE_STATUS.md`](QUEUE_STATUS.md).
+
 ## License
 
 This tap and TinyBridge are licensed under the [Apache License 2.0](LICENSE).
