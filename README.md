@@ -1,7 +1,5 @@
 # Homebrew Tap for TinyBridge
 
-[![Graphify](https://img.shields.io/badge/Graphify-knowledge%20graph-blue)](https://github.com/Graphify-Labs/graphify)
-
 Custom Homebrew tap to install TinyBridge - run Linux environments on macOS with zero configuration.
 
 ## Status
@@ -213,7 +211,7 @@ Part of the Mullassery open-source family:
 **Rejected / deferred:**
 - Intel formula until an x86_64 release exists.
 
-Full shipped/blocked/rejected detail: [`QUEUE_STATUS.md`](QUEUE_STATUS.md).
+Full shipped/blocked/rejected detail: [`docs/internal/QUEUE_STATUS.md`](docs/internal/QUEUE_STATUS.md).
 
 ## License
 
