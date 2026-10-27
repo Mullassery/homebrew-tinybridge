@@ -19,7 +19,7 @@ install on Intel Macs rather than fail with a confusing download error.
 ### 1. Add the Tap
 
 ```bash
-brew tap mullassery/tinybridge https://github.com/Mullassery/homebrew-tinybridge.git
+brew tap mullassery/tinybridge ../homebrew-tinybridge
 ```
 
 ### 2. Install TinyBridge
@@ -153,7 +153,7 @@ brew services restart tinybridged
 ## Development
 
 ```bash
-git clone https://github.com/Mullassery/homebrew-tinybridge.git
+git clone ../homebrew-tinybridge
 cd homebrew-tinybridge
 
 # Edit a formula, commit the change (brew tap clones from git, so it only
@@ -182,19 +182,19 @@ brew install mullassery/tinybridge-local/tinybridge
 
 ## Support & Issues
 
-- **Report bugs**: https://github.com/Mullassery/tinybridge/issues
-- **Tap issues**: https://github.com/Mullassery/homebrew-tinybridge/issues
-- **Documentation**: https://github.com/Mullassery/tinybridge
+- **Report bugs**: ../tinybridge/issues
+- **Tap issues**: ../homebrew-tinybridge/issues
+- **Documentation**: ../tinybridge
 
 ## Related projects
 
 Part of the Mullassery open-source family:
 
-- [TinyBridge](https://github.com/Mullassery/tinybridge) — the macOS-native Linux VM runtime this tap installs
-- [PrismNote](https://github.com/Mullassery/prismnote) — local-first SQL/notebook environment with AI assistance
-- [homebrew-prismnote](https://github.com/Mullassery/homebrew-prismnote) — Homebrew tap for PrismNote
-- [SyncFleet](https://github.com/Mullassery/SyncFleet) — peer-to-peer state synchronization for robotics fleets
-- [Browse all projects →](https://github.com/Mullassery?tab=repositories)
+- [TinyBridge](../tinybridge) — the macOS-native Linux VM runtime this tap installs
+- [PrismNote](../prismnote) — local-first SQL/notebook environment with AI assistance
+- [homebrew-prismnote](../homebrew-prismnote) — Homebrew tap for PrismNote
+- [SyncFleet](../SyncFleet) — peer-to-peer state synchronization for robotics fleets
+- [Browse all projects →](../Mullassery-profile)
 
 ## Known issues and deferred work
 

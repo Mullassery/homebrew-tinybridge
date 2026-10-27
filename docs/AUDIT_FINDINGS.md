@@ -1,6 +1,6 @@
 # Audit Report: homebrew-tinybridge
 Date: 2026-10-26 | Type: Read-only systems design audit  
-Repo: https://github.com/Mullassery/homebrew-tinybridge.git (local: /Users/georgimullassery/Desktop/Projects/homebrew-tinybridge) | Branch: main | Status: clean
+Repo: ../homebrew-tinybridge (local: /Users/georgimullassery/Desktop/Projects/homebrew-tinybridge) | Branch: main | Status: clean
 
 ## Overview
 Custom Homebrew tap for TinyBridge (Linux VMs on macOS via Apple Virtualization.framework). Contains formulas (`Formula/tinybridge.rb`, `Formula/tinybridged.rb`), docs, LICENSE, SECURITY.md, tools, USE_CASES.md.
